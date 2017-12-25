@@ -35,4 +35,38 @@ public class StreamTest {
 		stream5.limit(5).forEach(System.out::print);
 
 	}
+	
+	
+	/*
+	  筛选与切片
+		filter——接收 Lambda ， 从流中排除某些元素。
+		limit——截断流，使其元素不超过给定数量。
+		skip(n) —— 跳过元素，返回一个扔掉了前 n 个元素的流。若流中元素不足 n 个，则返回一个空流。与 limit(n) 互补
+		distinct——筛选，通过流所生成元素的 hashCode() 和 equals() 去除重复元素
+	 */
+	@Test
+	public void test2(){
+		List<Integer> list = Arrays.asList(1,2,3,4);
+		Stream<Integer> stream = list.stream().filter((e)->(e>2));
+		stream.forEach(System.out::print);
+		
+		System.out.println();
+		
+		List<Integer> list2 = Arrays.asList(1,2,3,4);
+		Stream<Integer> stream2 = list2.stream().limit(2);
+		stream2.forEach(System.out::print);
+		
+		System.out.println();
+		
+		List<Integer> list3 = Arrays.asList(1,2,3,4);
+		Stream<Integer> stream3 = list3.stream().skip(2);
+		stream3.forEach(System.out::print);
+		
+		System.out.println();
+		
+		List<Integer> list4 = Arrays.asList(1,2,3,4,4,3);
+		Stream<Integer> stream4 = list4.stream().distinct();
+		stream4.forEach(System.out::print);
+		
+	}
 }
