@@ -2,11 +2,24 @@ package java8;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.Test;
 
 public class StreamTest {
+	
+	List<Employee> emps = Arrays.asList(
+			new Employee(102, "李四", 59, 6666.66),
+			new Employee(101, "张三", 18, 9999.99),
+			new Employee(103, "王五", 28, 3333.33),
+			new Employee(104, "赵六", 8, 7777.77),
+			new Employee(104, "赵六", 8, 7777.77),
+			new Employee(104, "赵六", 8, 7777.77),
+			new Employee(105, "田七", 38, 5555.55)
+	);
+	
 	
 	//生成stream的四种方式：
 	@Test
@@ -69,4 +82,66 @@ public class StreamTest {
 		stream4.forEach(System.out::print);
 		
 	}
+	
+	@Test
+	public void test3(){
+		List<Integer> list = Arrays.asList(1,2,3,4);
+		list.stream().map((e)->e+1)
+			.forEach(System.out::print);
+	}
+	
+	@Test
+	public void test4(){
+		List<Integer> list = Arrays.asList(7,5,1,9,2,6,3,8,4);
+		list.stream()
+			.sorted()
+			.forEach(System.out::print);
+		
+		System.out.println("-------");
+		
+		list.stream()
+			.sorted((e1,e2)->{return -e1.compareTo(e2);})
+			.forEach(System.out::print);
+	}
+	
+	@Test
+	public void test5(){
+		List<String> collect = emps.stream()
+								   .map(Employee::getName)
+								   .collect(Collectors.toList());
+		collect.forEach(System.out::println);
+		
+		System.out.println("-----------------");
+		Optional<Integer> op = emps.stream().map(Employee::getAge).reduce(Integer::sum);
+		System.out.println(op.get());
+		
+		System.out.println("-----------------");
+		Double collect2 = emps.stream().collect(Collectors.averagingDouble(Employee::getSalary));
+		System.out.println(collect2);
+	}
+	
+	
+	@Test 
+	public void test6(){
+		Integer[] integerArray = new Integer[]{1,2,3,4};
+		Arrays.stream(integerArray).map((x)->(x*x)).forEach(System.out::println);
+	}
+	
+	@Test
+	public void test7(){
+		List<Employee> emps = Arrays.asList(
+				new Employee(102, "李四", 59, 6666.66),
+				new Employee(101, "张三", 18, 9999.99),
+				new Employee(103, "王五", 28, 3333.33),
+				new Employee(104, "赵六", 8, 7777.77),
+				new Employee(104, "赵六", 8, 7777.77),
+				new Employee(104, "赵六", 8, 7777.77),
+				new Employee(105, "田七", 38, 5555.55)
+		);
+		Optional<Integer> reduce = emps.stream()
+			.map((x)->1).reduce(Integer::sum);
+		System.out.println(reduce.get());
+	}
+	
+	
 }
