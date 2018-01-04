@@ -1,9 +1,11 @@
 package java8;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +36,7 @@ public class TestTransaction {
 	public void test1(){
 		transactions.stream()
 					.filter((t)->t.getYear()==2011)
-					.sorted((x,y)->(((Integer)x.getValue()).compareTo((Integer)y.getValue())))
+					.sorted((x,y)->Integer.compare(x.getValue(), y.getValue()))
 					.forEach(System.out::println);
 	}
 	
@@ -57,12 +59,34 @@ public class TestTransaction {
 					.forEach(System.out::println);
 	}
 	
-//	@Test
-//	public void test4(){
-////		transactions.stream()
-////					.collect(Collectors.)
-//	}
+	@Test
+	public void test4(){
+		String reduce = transactions.stream()
+					.map(Transaction::getTrader)
+					.map(Trader::getName)
+					.sorted()
+					.reduce("",String::concat);
+		System.out.println(reduce);
+		System.out.println("----------------------");
+		
+		String reduce2 = transactions.stream()
+									 .map(Transaction::getTrader)
+									 .map(Trader::getName)
+									 .flatMap(TestTransaction::getStreamStr)
+									 .sorted((x,y)->x.compareToIgnoreCase(y))
+									 .reduce("",String::concat);
+		System.out.println(reduce2);
+
+					
+	}
 	
+	public static Stream<String> getStreamStr(String str){
+		List list = new ArrayList();
+		for(Character c:str.toCharArray()){
+			list.add(c.toString());
+		}
+		return list.stream();
+	}
 	
 	@Test
 	public void test5(){
